@@ -26,13 +26,16 @@ public class RectBounce extends Clip {
 	}
 	
 	@Override
-	public void update() {
-		diameter += velocity;
-		if(diameter > p5.height || diameter < 0) velocity *= -1;
+	public void updateProjection() {
+		
 	}
 
 	@Override
-	public void render() {
+	public void renderProjection() {
+		
+		diameter += velocity;
+		if(diameter > p5.height || diameter < 0) velocity *= -1;
+		
 		p5.background(255);
 		p5.noFill();
 		p5.stroke(0);

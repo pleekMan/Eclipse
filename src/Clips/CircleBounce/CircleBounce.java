@@ -41,9 +41,9 @@ public class CircleBounce extends Clip {
 		projection.stroke(0);
 		projection.ellipse(p5.width * 0.5f, p5.height * 0.5f, diameter, diameter);
 
-		//if (p5.frameCount % 100 == 0) {
-			projection.fill(p5.random(255),p5.random(255),p5.random(255));
-		
+		// if (p5.frameCount % 100 == 0) {
+		projection.fill(p5.random(255), p5.random(255), p5.random(255));
+
 		projection.ellipse(p5.mouseX, p5.mouseY, 50, 50);
 
 		projection.endDraw();

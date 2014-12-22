@@ -30,12 +30,12 @@ public class Hedera extends Clip {
 	}
 
 	@Override
-	public void update() {
+	public void updateProjection() {
 
 	}
 
 	@Override
-	public void render() {
+	public void renderProjection() {
 		for (int i = 0; i < hojas.size(); i++) {
 			Hoja hojaActual = hojas.get(i); // va viendo cuantas hojas hay
 			hojaActual.dibujar();
@@ -63,7 +63,7 @@ public class Hedera extends Clip {
 		if (termino == true) {
 			p5.fill(0);
 			p5.textSize(100);
-			p5.textAlign(p5.CENTER);
+			p5.textAlign(p5.LEFT);
 			p5.text("HEDERA", p5.width / 2, p5.height / 2);
 			p5.textSize(10);
 

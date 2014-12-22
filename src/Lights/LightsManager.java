@@ -1,5 +1,9 @@
 package Lights;
 
+import Clips.CircleBounce.CircleBounce;
+import Clips.Hedera.Hedera;
+import Clips.LineColor.LineColor;
+import Clips.RectBounce.RectBounce;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import globals.Main;
@@ -22,6 +26,7 @@ public class LightsManager {
 	PGraphics lightLayer;
 	
 	int[] pickerColors;
+	int centralColor;
 	
 	public LightsManager(){
 		p5 = getP5();
@@ -43,6 +48,7 @@ public class LightsManager {
 			pickers[i] = new PVector();
 			pickerColors[i] = p5.color((i/(float)pickers.length) * 255f,0,0);
 		}
+		centralColor = p5.color(0);
 		
 		bindToLightLayer(null);
 		
@@ -79,20 +85,33 @@ public class LightsManager {
 		if (lightLayer != null) {
 			pick();
 		}
+		
+		if (editMode) {
+			drawCalibration();
+		}
 	}
 	
 	private void pick() {
 		for (int i = 0; i < pickers.length; i++) {
 			pickerColors[i] = lightLayer.get((int)pickers[i].x, (int)pickers[i].y);
 		}
+		centralColor = lightLayer.get((int)center.x, (int)center.y);
 	}
 
 	public void drawCalibration(){
+		
+		
+		// CENTER PICKER (ECLIPSE)
 		p5.noFill();
 		p5.stroke(200,0,200);
-		
 		p5.ellipse(center.x, center.y, innerRadius * 2, innerRadius * 2);
+		p5.noStroke();
+		p5.fill(0);
+		p5.ellipse(center.x, center.y, 15, 15);
+		p5.fill(centralColor);
+		p5.ellipse(center.x, center.y, 10, 10);
 		
+		// PICKERS
 		p5.noStroke();
 		for (int i = 0; i < pickers.length; i++) {
 			
@@ -113,6 +132,31 @@ public class LightsManager {
 	public void toggleEditMode(){
 		editMode = !editMode;
 	}
+	
+public void onKeyPressed(char key) {
+		
+	/*
+	if(key == 'e'){
+		toggleEditMode();
+	}
+	*/
+	
+	/*
+		// SELECT AND LOAD CLIPS
+		switch (key) {
+		case '1':
+			CircleBounce circleBounce = new CircleBounce();
+			circleBounce.load();
+			clips.add(circleBounce);
+			System.out.println("Loaded :: " + CircleBounce.class.getName());
+			break;
+		default:
+			//System.out.println("No Clip Found at: " + selectedClip);
+			break;
+		}
+		*/
+		
+}
 
 	protected Main getP5() {
 		return PAppletSingleton.getInstance().getP5Applet();

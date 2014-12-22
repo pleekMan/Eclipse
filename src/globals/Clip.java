@@ -17,7 +17,7 @@ public class Clip {
 	public void load() {
 		isPlaying = false;
 		
-		projection = p5.createGraphics(p5.width, p5.height);
+		projection = p5.createGraphics(p5.width, p5.height); // SI PONGO P2D, EL FRAMERATE DROPPEA MAAAAALL..!!
 		lights = p5.createGraphics(p5.width, p5.height);
 	}
 
@@ -34,12 +34,14 @@ public class Clip {
 		return isPlaying;
 	}
 	
-	public void update() {
-
+	public void updateProjection() {
 	}
-
-	public void render() {
-
+	public void updateLights(){
+	}
+	
+	public void renderProjection() {
+	}
+	public void renderLights(){
 	}
 	
 	public PGraphics getProjectionLayer(){

@@ -9,9 +9,10 @@ public class Main extends PApplet {
 	LightsManager lights;
 
 	public void setup() {
-		size(1024, 768);
+		size(1024, 768,P2D);
 		setPAppletSingleton();
 
+		textureMode(NORMAL);
 		
 		lights = new LightsManager();
 		lights.setup();
@@ -21,17 +22,33 @@ public class Main extends PApplet {
 	}
 
 	public void draw() {
-		//background(25,25,50);
+		frame.setTitle(Integer.toString(((int)frameRate)) + " fps");
+		background(25,25,50);
+		drawBackLines();
+		
 		clipManager.update();
+		clipManager.render();
 		lights.update();
-		lights.drawCalibration();
+		//lights.drawCalibration();
+	}
+
+	private void drawBackLines() {
+		stroke(200);
+		float offset = frameCount % 40;
+		for (int i = 0; i < width; i+=40) {
+			line(i + offset,0,i + offset,height);
+		}
+		
 	}
 
 	public void keyPressed() {
 
 		clipManager.onKeyPressed(key);
+		lights.onKeyPressed(key);
 
-		if (key == 'r') {
+		if (key == 'e') {
+			clipManager.toggleEditMode();
+			lights.toggleEditMode();
 		}
 
 		if (key == CODED) {
