@@ -1,9 +1,14 @@
 package globals;
 
+import processing.core.PGraphics;
+
 public class Clip {
 
 	protected Main p5;
 	boolean isPlaying;
+	
+	protected PGraphics projection;
+	protected PGraphics lights;
 
 	public Clip() {
 		p5 = getP5();
@@ -11,6 +16,9 @@ public class Clip {
 
 	public void load() {
 		isPlaying = false;
+		
+		projection = p5.createGraphics(p5.width, p5.height);
+		lights = p5.createGraphics(p5.width, p5.height);
 	}
 
 
@@ -32,6 +40,13 @@ public class Clip {
 
 	public void render() {
 
+	}
+	
+	public PGraphics getProjectionLayer(){
+		return projection;
+	}
+	public PGraphics getLightsLayer(){
+		return lights;
 	}
 
 	protected Main getP5() {

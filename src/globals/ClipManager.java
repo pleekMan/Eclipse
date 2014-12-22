@@ -6,6 +6,7 @@ import Clips.CircleBounce.CircleBounce;
 import Clips.RectBounce.RectBounce;
 import Clips.Hedera.Hedera;
 import Clips.LineColor.LineColor;
+import Lights.LightsManager;
 
 
 public class ClipManager {
@@ -13,13 +14,17 @@ public class ClipManager {
 	Main p5;
 	ArrayList<Clip> clips;
 	int selectedClip;
+	
+	LightsManager lights;
 
-	public ClipManager() {
+	public ClipManager(LightsManager _lightManager) {
 		p5 = getP5();
 
 		clips = new ArrayList<Clip>();
 		
 		selectedClip = 0;
+		
+		lights = _lightManager;
 	}
 
 	public void setup() {
@@ -67,6 +72,7 @@ public class ClipManager {
 		case '4':
 			LineColor linea = new LineColor();
 			linea.load();
+			//lights.bindToLightLayer(linea.getLightsLayer());
 			clips.add(linea);
 			System.out.println("Loaded :: " + LineColor.class.getName());
 			break;
@@ -110,6 +116,7 @@ public class ClipManager {
 				clip.stop();
 			}
 			
+			lights.bindToLightLayer(clips.get(selectedClip).getLightsLayer());
 			clips.get(selectedClip).start();
 		
 		} else {

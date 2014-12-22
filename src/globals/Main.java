@@ -1,21 +1,30 @@
 package globals;
 
+import Lights.LightsManager;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
 
 	ClipManager clipManager;
+	LightsManager lights;
 
 	public void setup() {
 		size(1024, 768);
 		setPAppletSingleton();
 
-		clipManager = new ClipManager();
+		
+		lights = new LightsManager();
+		lights.setup();
+		
+		clipManager = new ClipManager(lights);
+
 	}
 
 	public void draw() {
 		//background(25,25,50);
 		clipManager.update();
+		lights.update();
+		lights.drawCalibration();
 	}
 
 	public void keyPressed() {

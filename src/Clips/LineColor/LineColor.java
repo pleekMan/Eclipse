@@ -1,5 +1,6 @@
 package Clips.LineColor;
 
+import processing.core.PGraphics;
 import globals.Clip;
 import globals.Main;
 import globals.PAppletSingleton;
@@ -42,13 +43,26 @@ public class LineColor extends Clip {
 
 	@Override
 	public void render() {
-		p5.pushMatrix();
-		p5.translate(p5.width * 0.5f, p5.height * 0.5f);
-		p5.rotate(angle);
+		projection.beginDraw();
 		
-		p5.stroke(color);
-		p5.line(-largo * 0.5f, 0, largo * 0.5f, 0);
-		p5.popMatrix();
+		projection.pushMatrix();
+		projection.translate(p5.width * 0.5f, p5.height * 0.5f);
+		projection.rotate(angle);
+		
+		projection.stroke(color);
+		projection.line(-largo * 0.5f, 0, largo * 0.5f, 0);
+		projection.popMatrix();
+		
+		projection.endDraw();
+		
+		p5.image(projection, 0, 0);
+	}
+	
+	public PGraphics getProjectionLayer(){
+		return projection;
+	}
+	public PGraphics getLightsLayer(){
+		return projection;
 	}
 
 	@Override
