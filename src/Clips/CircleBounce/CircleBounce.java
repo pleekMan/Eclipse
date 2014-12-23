@@ -9,7 +9,6 @@ public class CircleBounce extends Clip {
 
 	float diameter;
 	float velocity;
-	boolean isPlaying;
 
 	public CircleBounce() {
 		super();
@@ -22,18 +21,15 @@ public class CircleBounce extends Clip {
 
 		diameter = 1;
 		velocity = 2;
-		isPlaying = false;
 	}
 
 	@Override
-	public void update() {
+	public void updateProjection() {
+
 		diameter += velocity;
 		if (diameter > p5.height || diameter < 0)
 			velocity *= -1;
-	}
 
-	@Override
-	public void render() {
 		projection.beginDraw();
 
 		projection.background(255);
@@ -48,17 +44,53 @@ public class CircleBounce extends Clip {
 
 		projection.endDraw();
 
+	}
+
+	@Override
+	public void updateLights() {
+
+		lights.beginDraw();
+		lights.background(0);
+
+		lights.fill(255, 0, 255);
+		lights.stroke(255);
+		lights.strokeWeight(4);
+
+		lights.ellipse(p5.width * 0.5f, p5.height * 0.5f, p5.height - diameter, p5.height - diameter);
+
+		lights.endDraw();
+
+	}
+
+	@Override
+	public void renderProjection() {
+		
+		/*
+		p5.beginShape();
+		p5.texture(projection);
+		p5.vertex(0, 0, 0, 0);
+		p5.vertex(projection.width, 0, 1, 0);
+		p5.vertex(projection.width, projection.height, 1, 1);
+		p5.vertex(0, projection.height, 0, 1);
+		p5.endShape(p5.CLOSE);
+		*/
 		p5.image(projection, 0, 0);
 
 	}
 
+	@Override
+	public void renderLights() {
+		p5.image(lights, 0, 0);
+	}
+
+	@Override
 	public PGraphics getProjectionLayer() {
 		return projection;
 	}
 
+	@Override
 	public PGraphics getLightsLayer() {
-		// IN THIS CASE, PROJECTION AND LIGHT LAYER ARE THE SAME
-		return projection;
+		return lights;
 	}
 
 }

@@ -29,12 +29,6 @@ public class LineColor extends Clip {
 	@Override
 	public void updateProjection() {
 
-	}
-
-	@Override
-	public void renderProjection() {
-
-		
 		angle += angleIncrement;
 		color += (int) (angleIncrement * 100);
 		largo += (int) (angleIncrement * 1000);
@@ -57,8 +51,28 @@ public class LineColor extends Clip {
 		projection.popMatrix();
 
 		projection.endDraw();
+	}
+	
+	@Override
+	public void updateLights(){
+		lights.beginDraw();
+		
+		if (p5.frameCount % 20 < 10) {
+			lights.background(0);
+		} else {
+			lights.background(255,255,0);
+		}
+		lights.endDraw();
+	}
 
+	@Override
+	public void renderProjection() {
 		p5.image(projection, 0, 0);
+	}
+	
+	@Override
+	public void renderLights(){
+		p5.image(lights, 0, 0);
 	}
 
 	public PGraphics getProjectionLayer() {
@@ -66,7 +80,7 @@ public class LineColor extends Clip {
 	}
 
 	public PGraphics getLightsLayer() {
-		return projection;
+		return lights;
 	}
 
 	@Override

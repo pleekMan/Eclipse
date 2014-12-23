@@ -64,10 +64,6 @@ public class ClipManager {
 
 		if (editMode) {
 
-			/*
-			 * if (showLightLayer) { clips.get(playingClip).renderLights(); }
-			 */
-
 			p5.textSize(12);
 
 			// BACKPLANE
