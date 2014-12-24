@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import processing.core.PGraphics;
 import Clips.CircleBounce.CircleBounce;
 import Clips.RectBounce.RectBounce;
+import Clips.VideoTest.VideoTest;
 import Clips.Hedera.Hedera;
 import Clips.LineColor.LineColor;
 import Lights.LightsManager;
@@ -93,10 +94,10 @@ public class ClipManager {
 			System.out.println("Loaded :: " + CircleBounce.class.getName());
 			break;
 		case '2':
-			RectBounce rectBounce = new RectBounce();
-			rectBounce.load();
-			clips.add(rectBounce);
-			System.out.println("Loaded :: " + RectBounce.class.getName());
+			VideoTest video = new VideoTest();
+			video.load();
+			clips.add(video);
+			System.out.println("Loaded :: " + VideoTest.class.getName());
 			break;
 		case '3':
 			Hedera hiedra = new Hedera();

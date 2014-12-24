@@ -2,8 +2,6 @@ package Clips.CircleBounce;
 
 import processing.core.PGraphics;
 import globals.Clip;
-import globals.Main;
-import globals.PAppletSingleton;
 
 public class CircleBounce extends Clip {
 
