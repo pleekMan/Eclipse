@@ -6,6 +6,9 @@ public class Clip {
 
 	protected Main p5;
 	boolean isPlaying;
+	public boolean useProjectionForLights;
+	
+	String name;
 	
 	protected PGraphics projection;
 	protected PGraphics lights;
@@ -16,6 +19,9 @@ public class Clip {
 
 	public void load() {
 		isPlaying = false;
+		useProjectionForLights = false;
+		
+		name = "??";
 		
 		projection = p5.createGraphics(p5.width, p5.height); // SI PONGO P2D, EL FRAMERATE DROPPEA MAAAAALL..!!
 		lights = p5.createGraphics(p5.width, p5.height);
@@ -34,8 +40,20 @@ public class Clip {
 		return isPlaying;
 	}
 	
+	public void setName(String _name){
+		name = _name;
+	}
+	public String getName(){
+		return name;
+	}
+	
+	public void useProjectionForLights(boolean state){
+		useProjectionForLights = state;
+	}
+	
 	public void updateProjection() {
 	}
+	
 	public void updateLights(){
 	}
 	
@@ -48,8 +66,11 @@ public class Clip {
 		return projection;
 	}
 	public PGraphics getLightsLayer(){
-		return lights;
-	}
+		if (useProjectionForLights) {
+			return projection;
+		} else {
+			return lights;
+		}	}
 
 	protected Main getP5() {
 		return PAppletSingleton.getInstance().getP5Applet();

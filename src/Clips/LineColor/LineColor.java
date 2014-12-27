@@ -75,6 +75,7 @@ public class LineColor extends Clip {
 		p5.image(lights, 0, 0);
 	}
 
+	/*
 	public PGraphics getProjectionLayer() {
 		return projection;
 	}
@@ -82,6 +83,7 @@ public class LineColor extends Clip {
 	public PGraphics getLightsLayer() {
 		return lights;
 	}
+	*/
 
 	@Override
 	public Main getP5() {

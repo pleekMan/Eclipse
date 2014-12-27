@@ -287,6 +287,7 @@ public class LightsManager {
 		setupPickers();
 	}
 
+
 	protected Main getP5() {
 		return PAppletSingleton.getInstance().getP5Applet();
 	}

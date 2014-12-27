@@ -49,7 +49,7 @@ public class Main extends PApplet {
 		}
 
 		// MOUSE POSITION
-		fill(255);
+		fill(255,0,0);
 		text("FR: " + frameRate, 20, 20);
 		text("X: " + mouseX + " / Y: " + mouseY, mouseX, mouseY);
 
@@ -61,11 +61,11 @@ public class Main extends PApplet {
 		lights.onKeyPressed(key);
 
 		if (key == 'e') {
-			
+
 			clipManager.toggleEditMode();
-			
+
 			lights.toggleEditMode();
-			
+
 			if (lights.editMode) {
 				cp5.show();
 			} else {
@@ -98,36 +98,66 @@ public class Main extends PApplet {
 		// ship.onMouseMoved();
 	}
 
-	// GUI - BEGIN -------------------------------------------------------------------------
+	// GUI - BEGIN
+	// -------------------------------------------------------------------------
 
 	private void createControllers() {
 
 		cp5 = new ControlP5(this);
 
+		// CLIP MANAGER
+		//cp5.addButton("Use_Projection_For_Lights").setPosition(20, 100).setSize(150, 30);
+		//cp5.addButton("Previous_Clip").setCaptionLabel("<< (Q)").setPosition(20, 100).setSize(30, 30).setColor(new CColor(color(0, 200, 200), color(0, 150, 150), color(0, 200, 200), color(255), color(255)));
+		//cp5.addButton("Next_Clip").setCaptionLabel(">> (W)").setPosition(60, 100).setSize(30, 30).setColor(new CColor(color(0, 200, 200), color(0, 150, 150), color(0, 200, 200), color(255), color(255)));
+		cp5.addToggle("Use_Projection_For_Lights").setPosition(20, 250).setSize(120, 30).setCaptionLabel("USE PROJECTION FOR LIGHTS").setValue(false).setColorBackground(color(255,255,0)).setColorForeground(color(200,200,0));//.setColor(new CColor(color(0, 200, 200), color(0, 150, 150), color(0, 200, 200), color(255), color(255)));
+
+		
+		// LIGHT CALIBRATION
 		cp5.addSlider("Ring_Count").setPosition(20, 610).setSize(150, 20).setRange(2, 20).setNumberOfTickMarks(19).setValue(5).snapToTickMarks(true).showTickMarks(true);
 		cp5.addSlider("Ray_Count").setPosition(20, 650).setSize(150, 20).setRange(3, 16).setNumberOfTickMarks(14).setValue(8).snapToTickMarks(true).showTickMarks(true);
-		cp5.addButton("Reset_Lights").setPosition(20, 690).setSize(70, 30).setColor(new CColor(color(0,200,200),color(0,150,150),color(0,200,200),color(255),color(255)));
-		
+		cp5.addButton("Reset_Lights").setPosition(20, 690).setSize(70, 30).setColor(new CColor(color(0, 200, 200), color(0, 150, 150), color(0, 200, 200), color(255), color(255)));
+
 		cp5.hide();
-		
-		}
+
+	}
+	
+	// CLIP MANAGER
+	public void Use_Projection_For_Lights(boolean theFlag) {
+		clipManager.useProjectionForLights(theFlag);
+	}
+	/*
+	public void Previous_Clip() {
+		clipManager.goToPreviousClip();
+		Toggle toggle = (Toggle) cp5.getController("Use_Projection_For_Lights");
+		toggle.setState(clipManager.getPlayingClip().useProjectionForLights);
+	}
+	public void Next_Clip() {
+		clipManager.goToNextClip();
+	}
+	*/
+
+	
+
+	// LIGHT CALIBRATION
 
 	public void Ring_Count(float count) {
 		lights.modifyRingCount((int) count);
 	}
+
 	public void Ray_Count(float count) {
 		lights.modifyRayCount((int) count);
 	}
-	
-	public void Reset_Lights(){
+
+	public void Reset_Lights() {
 		lights.resetLightSetup();
-		
+
 		cp5.getController("Ring_Count").setValue(5);
 		cp5.getController("Ray_Count").setValue(8);
 
 	}
 
-	// GUI - END ---------------------------------------------------------------------------
+	// GUI - END
+	// ---------------------------------------------------------------------------
 
 	// *******************************************
 	// *******************************************

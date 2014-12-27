@@ -2,6 +2,7 @@ package globals;
 
 import java.util.ArrayList;
 
+import controlP5.Toggle;
 import processing.core.PGraphics;
 import Clips.CircleBounce.CircleBounce;
 import Clips.RectBounce.RectBounce;
@@ -14,8 +15,8 @@ public class ClipManager {
 
 	Main p5;
 	ArrayList<Clip> clips;
-	int selectedClip;
-	int playingClip;
+	public int selectedClip;
+	public int playingClip;
 
 	LightsManager lights;
 
@@ -61,7 +62,8 @@ public class ClipManager {
 				}
 			}
 		}
-		
+
+		// EDIT MODE DISPLAY -------------------------------
 
 		if (editMode) {
 
@@ -75,12 +77,67 @@ public class ClipManager {
 			p5.fill(255);
 			p5.noStroke();
 
-			p5.text("FR: " + p5.frameRate, 10, 20);
-			p5.text("Selected Clip: " + selectedClip, 10, 40);
-			p5.text("Playing Clip: " + playingClip + "/" + clips.size(), 10, 60);
+			p5.text("FR: " + p5.frameRate, 20, 20);
+			p5.text("Selected Clip: " + selectedClip, 20, 40);
+			p5.text("Playing Clip: " + playingClip + "/" + clips.size(), 20, 60);
+
+			drawClipNavigator();
+
+			// DISPLAY WHICH LAYER IS BEING USED FOR THE LIGHTS
+			if (clips.size() > 0) {
+				if (getPlayingClip().useProjectionForLights) {
+					p5.text("Light Layer: - PROJECTION", 20, 80);
+				} else {
+					p5.text("Light Layer: - LIGHTS", 20, 80);
+
+				}
+			}
 
 		}
 
+	}
+
+	private void drawClipNavigator() {
+		int originX = 20;
+		int originY = 140;
+
+		if (clips.size() > 0) {
+
+			float boxSize = 200f / clips.size();
+
+			p5.stroke(0, 200, 200);
+			for (int i = 0; i < clips.size(); i++) {
+				
+				if (i == playingClip) {
+					p5.fill(200,0,0);
+				} else if (i == selectedClip){
+					p5.fill(200,200,0);
+				} else {
+					p5.fill(127);
+				}
+				
+				float x = originX + (boxSize * i);
+				p5.rect(x, originY, boxSize, 40);
+			}
+			
+			// PLAYING CLIP NAME
+			p5.fill(200,0,0);
+			p5.stroke(200,0,0);
+			String playingClipName = getPlayingClip().getName();
+			p5.text(playingClipName, 20, originY - 20);
+			
+			p5.line(originX + (playingClip * boxSize), originY, originX + (playingClip * boxSize), originY - 18);
+			p5.line(originX, originY - 18, originX + (playingClip * boxSize), originY - 18);
+	
+			
+			// SELECTED CLIP NAME
+			String selectedClipName = getSelectedClip().getName();
+			p5.text(selectedClipName, 20, originY + 60);
+			
+			
+		} else {
+			p5.text("-- NO CLIPS LOADED --", originX, originY);
+		}
 	}
 
 	public void onKeyPressed(char key) {
@@ -90,25 +147,28 @@ public class ClipManager {
 		case '1':
 			CircleBounce circleBounce = new CircleBounce();
 			circleBounce.load();
+			circleBounce.setName("CIRCLE");
 			clips.add(circleBounce);
 			System.out.println("Loaded :: " + CircleBounce.class.getName());
 			break;
 		case '2':
 			VideoTest video = new VideoTest();
 			video.load();
+			video.setName("VIDEO");
 			clips.add(video);
 			System.out.println("Loaded :: " + VideoTest.class.getName());
 			break;
 		case '3':
 			Hedera hiedra = new Hedera();
 			hiedra.load();
+			hiedra.setName("HEDERA");
 			clips.add(hiedra);
 			System.out.println("Loaded :: " + Hedera.class.getName());
 			break;
 		case '4':
 			LineColor linea = new LineColor();
 			linea.load();
-			// lights.bindToLightLayer(linea.getLightsLayer());
+			linea.setName("LINEA LOQUIS");
 			clips.add(linea);
 			System.out.println("Loaded :: " + LineColor.class.getName());
 			break;
@@ -126,21 +186,15 @@ public class ClipManager {
 		}
 		if (key == 's') {
 			if (clips.size() > 0) {
-				clips.get(selectedClip).stop();
+				getSelectedClip().stop();
 			}
 		}
 
 		if (key == 'w') {
-			selectedClip++;
-			// if (selectedClip > clips.size() - 1) {
-			// selectedClip = clips.size() - 1;
-			// }
+			goToNextClip();
 		}
 		if (key == 'q') {
-			selectedClip--;
-			if (selectedClip < 0) {
-				selectedClip = 0;
-			}
+			goToPreviousClip();
 		}
 
 		if (key == 'l') {
@@ -156,9 +210,13 @@ public class ClipManager {
 				clip.stop();
 			}
 
-			lights.bindToLightLayer(clips.get(selectedClip).getLightsLayer());
-			clips.get(selectedClip).start();
+			lights.bindToLightLayer(getSelectedClip().getLightsLayer());
+			getSelectedClip().start();
 			playingClip = selectedClip;
+
+			// UPDATE THE_USE_PROJECTION_FOR_LIGHTS_TOGGLE
+			Toggle toggle = (Toggle) p5.cp5.getController("Use_Projection_For_Lights");
+			toggle.setState(getPlayingClip().useProjectionForLights);
 
 		} else {
 			System.out.println("No Clip Found at: " + selectedClip);
@@ -171,6 +229,36 @@ public class ClipManager {
 
 	public void toggleLightLayer() {
 		showLightLayer = !showLightLayer;
+	}
+
+	public void useProjectionForLights(boolean state) {
+		// TODO HACERLO BIEN
+		if (clips.size() > 0) {
+			getPlayingClip().useProjectionForLights(state);
+			lights.bindToLightLayer(getPlayingClip().getLightsLayer());
+		}
+	}
+
+	public Clip getPlayingClip() {
+		return clips.get(playingClip);
+	}
+
+	public Clip getSelectedClip() {
+		return clips.get(selectedClip);
+	}
+
+	public void goToNextClip() {
+		selectedClip++;
+		if (selectedClip > clips.size() - 1) {
+			selectedClip = clips.size() - 1;
+		}
+	}
+
+	public void goToPreviousClip() {
+		selectedClip--;
+		if (selectedClip < 0) {
+			selectedClip = 0;
+		}
 	}
 
 	protected Main getP5() {
