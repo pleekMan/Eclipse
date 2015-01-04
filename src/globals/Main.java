@@ -114,10 +114,11 @@ public class Main extends PApplet {
 
 		
 		// LIGHT CALIBRATION
-		cp5.addSlider("Ring_Count").setPosition(20, 610).setSize(150, 20).setRange(2, 20).setNumberOfTickMarks(19).setValue(5).snapToTickMarks(true).showTickMarks(true);
-		cp5.addSlider("Ray_Count").setPosition(20, 650).setSize(150, 20).setRange(3, 16).setNumberOfTickMarks(14).setValue(8).snapToTickMarks(true).showTickMarks(true);
+		cp5.addSlider("Ring_Count").setPosition(20, 570).setSize(150, 20).setRange(2, 20).setNumberOfTickMarks(19).setValue(15).snapToTickMarks(true).showTickMarks(true);
+		cp5.addSlider("Ray_Count").setPosition(20, 610).setSize(150, 20).setRange(3, 16).setNumberOfTickMarks(14).setValue(8).snapToTickMarks(true).showTickMarks(true);
+		cp5.addSlider("Picker_Offset").setPosition(20, 650).setSize(150, 20).setRange(-100, 100).setValue(0).setNumberOfTickMarks(3).snapToTickMarks(false).showTickMarks(true);
 		cp5.addButton("Reset_Lights").setPosition(20, 690).setSize(70, 30).setColor(new CColor(color(0, 200, 200), color(0, 150, 150), color(0, 200, 200), color(255), color(255)));
-
+		
 		cp5.hide();
 
 	}
@@ -148,12 +149,17 @@ public class Main extends PApplet {
 	public void Ray_Count(float count) {
 		lights.modifyRayCount((int) count);
 	}
+	
+	public void Picker_Offset(float offset){
+		lights.setPickerOffset(offset);
+	}
 
 	public void Reset_Lights() {
 		lights.resetLightSetup();
 
-		cp5.getController("Ring_Count").setValue(5);
+		cp5.getController("Ring_Count").setValue(15);
 		cp5.getController("Ray_Count").setValue(8);
+		cp5.getController("Picker_Offset").setValue(0);
 
 	}
 

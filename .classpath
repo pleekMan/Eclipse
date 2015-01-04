@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="/Projects/Eclipse WorkSpace/libraries/openGL/jogl-all.jar"/>
 	<classpathentry kind="lib" path="/Projects/Eclipse WorkSpace/libraries/openGL/gluegen-rt-natives-macosx-universal.jar"/>
 	<classpathentry kind="lib" path="/Projects/Eclipse WorkSpace/libraries/openGL/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="/Projects/Eclipse WorkSpace/libraries/serial/library/serial.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

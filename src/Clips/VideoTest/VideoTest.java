@@ -2,6 +2,7 @@ package Clips.VideoTest;
 
 import org.gstreamer.lowlevel.BaseSrcAPI.Create;
 
+import Lights.LightsManager;
 import processing.core.*;
 import globals.Clip;
 import processing.video.*;
@@ -50,15 +51,13 @@ public class VideoTest extends Clip {
 				video.read();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		videoTransfer = video.get();
 		
 		projection.beginDraw();
-
 		projection.image(videoTransfer, 0, 0);
-
 		projection.endDraw();
 
 	}
@@ -66,21 +65,27 @@ public class VideoTest extends Clip {
 	@Override
 	public void updateLights() {
 
-		lights.beginDraw();
+		//lights.beginDraw();
 
-		lights.endDraw();
+		//lights.endDraw();
 
 	}
 
 	@Override
 	public void renderProjection() {
-		p5.image(projection, 0, 0);
+		p5.pushMatrix();
+		p5.translate(LightsManager.center.x, LightsManager.center.y);
+		p5.image(projection, 0, 0, LightsManager.getBoundingBoxDimension(), LightsManager.getBoundingBoxDimension());
+		p5.popMatrix();
 
 	}
 
 	@Override
 	public void renderLights() {
-		p5.image(lights, 0, 0);
+		p5.pushMatrix();
+		p5.translate(LightsManager.center.x, LightsManager.center.y);
+		p5.image(lights, 0, 0, LightsManager.getBoundingBoxDimension(), LightsManager.getBoundingBoxDimension());
+		p5.popMatrix();
 	}
 
 	@Override

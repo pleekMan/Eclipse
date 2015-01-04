@@ -1,15 +1,15 @@
 package Lights;
 
-import java.util.Arrays;
-
 import processing.core.PGraphics;
 import processing.core.PVector;
+import processing.serial.*;
 import globals.Main;
 import globals.PAppletSingleton;
 
 public class LightsManager {
 
 	Main p5;
+	Serial serialPort;
 
 	int ledsRayCount;
 	int ledsPerStrip;
@@ -29,6 +29,10 @@ public class LightsManager {
 
 	public LightsManager() {
 		p5 = getP5();
+
+		p5.println(Serial.list());
+		String portName = Serial.list()[5]; // ARDUINO IS USUALLY PORT 5 (tty.usbmodemXXXX)
+		serialPort = new Serial(p5, portName, 115200);
 	}
 
 	public void setup() {
@@ -36,14 +40,12 @@ public class LightsManager {
 		resetLightSetup();
 		setupPickers();
 
-
 		centralColor = p5.color(0);
 
 		bindToLightLayer(null);
 
 		editMode = false;
 		editDragDistance = 20f;
-
 
 	}
 
@@ -82,18 +84,30 @@ public class LightsManager {
 
 	private void pick() {
 		for (int i = 0; i < pickers.length; i++) {
-			
-			//int pickX = (int)((pickers[i].x / p5.width) * lightLayer.width);
-			
-			// IF THE CLIPS ARE GOING TO BE MOVING ALONG THE CALIBRATION, THE PICKERS NEED TO ADJUST THEIR (global X Y ) PICKING
+
+			// int pickX = (int)((pickers[i].x / p5.width) * lightLayer.width);
+
+			// IF THE CLIPS ARE GOING TO BE MOVING ALONG THE CALIBRATION, THE
+			// PICKERS NEED TO ADJUST THEIR (global X Y ) PICKING
 			// TO THE CLIPS SIZE/TRANSFORM PICK
-			int pickX = (int)(p5.map(pickers[i].x, center.x - outerRadius, center.x + outerRadius, 0, lightLayer.width));
-			int pickY = (int)(p5.map(pickers[i].y, center.y - outerRadius, center.y + outerRadius, 0, lightLayer.height));
-			
+			int pickX = (int) (p5.map(pickers[i].x, center.x - outerRadius - offset, center.x + outerRadius + offset, 0, lightLayer.width));
+			int pickY = (int) (p5.map(pickers[i].y, center.y - outerRadius - offset, center.y + outerRadius + offset, 0, lightLayer.height));
+
 			pickerColors[i] = lightLayer.get(pickX, pickY);
-			//pickerColors[i] = lightLayer.get((int) pickers[i].x, (int) pickers[i].y);
+			// pickerColors[i] = lightLayer.get((int) pickers[i].x, (int)
+			// pickers[i].y);
 		}
-		centralColor = lightLayer.get((int) center.x, (int) center.y);
+		centralColor = lightLayer.get((int) (lightLayer.width * 0.5f), (int) (lightLayer.height * 0.5f));
+		
+		sendColors();
+	}
+	
+	private void sendColors(){
+		int realLEDCount = 30;
+		for (int i=0; i < realLEDCount; i++) {
+		      byte[] toSend = {(byte)(p5.red(pickerColors[i])),(byte)(p5.green(pickerColors[i])), (byte)(p5.blue(pickerColors[i])) };
+		      serialPort.write(toSend);
+		}
 	}
 
 	public void drawCalibration() {
@@ -102,6 +116,8 @@ public class LightsManager {
 		p5.noFill();
 		p5.stroke(200, 0, 200);
 		p5.ellipse(center.x, center.y, innerRadius * 2, innerRadius * 2);
+		p5.ellipse(center.x, center.y, outerRadius * 2, outerRadius * 2);
+
 		p5.noStroke();
 		p5.fill(0);
 		p5.ellipse(center.x, center.y, 15, 15);
@@ -210,20 +226,42 @@ public class LightsManager {
 
 	}
 
+	@Deprecated
 	public void addRing() {
 		modifyPickersCount(0, 1);
 	}
 
+	@Deprecated
 	public void removeRing() {
 		modifyPickersCount(0, -1);
 	}
 
+	@Deprecated
 	public void addRay() {
 		modifyPickersCount(1, 0);
 	}
 
+	@Deprecated
 	public void removeRay() {
 		modifyPickersCount(-1, 0);
+	}
+
+	// USED WITH ADD AND REMOVE METHODS
+	@Deprecated
+	private void modifyPickersCount(int addRay, int addRing) {
+
+		ledsPerStrip += addRing;
+		ledsRayCount += addRay;
+
+		pickers = (PVector[]) p5.expand(pickers, ledsRayCount * ledsPerStrip);
+		pickerColors = p5.expand(pickerColors, pickers.length);
+		pickerColors = new int[pickers.length];
+		for (int i = 0; i < pickers.length; i++) {
+			pickers[i] = new PVector();
+			pickerColors[i] = p5.color((i / (float) pickers.length) * 255f, 0, 0);
+		}
+
+		setupPickers();
 	}
 
 	// USED WITH GUI SLIDERS
@@ -258,50 +296,38 @@ public class LightsManager {
 		setupPickers();
 	}
 
-	// USED WITH ADD AND REMOVE METHODS
-	private void modifyPickersCount(int addRay, int addRing) {
-
-		ledsPerStrip += addRing;
-		ledsRayCount += addRay;
-
-		pickers = (PVector[]) p5.expand(pickers, ledsRayCount * ledsPerStrip);
-		pickerColors = p5.expand(pickerColors, pickers.length);
-		pickerColors = new int[pickers.length];
-		for (int i = 0; i < pickers.length; i++) {
-			pickers[i] = new PVector();
-			pickerColors[i] = p5.color((i / (float) pickers.length) * 255f, 0, 0);
-		}
-
+	public void setPickerOffset(float _offset) {
+		offset = _offset;
 		setupPickers();
 	}
-	
-	public void resetLightSetup(){
-		
+
+	public void resetLightSetup() {
+
 		ledsRayCount = 8;
-		ledsPerStrip = 5;
+		ledsPerStrip = 15;
 
 		pickers = new PVector[ledsRayCount * ledsPerStrip];
 		pickerColors = new int[pickers.length];
-		
+
 		for (int i = 0; i < pickers.length; i++) {
 			pickers[i] = new PVector();
 			pickerColors[i] = p5.color((i / (float) pickers.length) * 255f, 0, 0);
 		}
-		
+
 		center = new PVector(p5.width * 0.5f, p5.height * 0.5f);
 		innerRadius = 100;
 		outerRadius = 350;
 		offset = 0;
-		
+
 		setupPickers();
 	}
-	
-	public PVector getCenter(){
+
+	public PVector getCenter() {
 		return center;
 	}
-	
-	public static float getBoundingBoxDimension(){
-		return outerRadius * 2;
+
+	public static float getBoundingBoxDimension() {
+		return (outerRadius * 2) + (offset * 2);
 	}
 
 	protected Main getP5() {

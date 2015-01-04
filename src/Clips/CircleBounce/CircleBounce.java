@@ -64,12 +64,6 @@ public class CircleBounce extends Clip {
 	@Override
 	public void renderProjection() {
 
-		/*
-		 * p5.beginShape(); p5.texture(projection); p5.vertex(0, 0, 0, 0);
-		 * p5.vertex(projection.width, 0, 1, 0); p5.vertex(projection.width,
-		 * projection.height, 1, 1); p5.vertex(0, projection.height, 0, 1);
-		 * p5.endShape(p5.CLOSE);
-		 */
 		p5.pushMatrix();
 		p5.translate(LightsManager.center.x, LightsManager.center.y);
 		p5.image(projection, 0, 0, LightsManager.getBoundingBoxDimension(), LightsManager.getBoundingBoxDimension());
@@ -87,21 +81,5 @@ public class CircleBounce extends Clip {
 			p5.popMatrix();
 		}
 	}
-	
-	/*
-	@Override
-	public PGraphics getProjectionLayer() {
-		return projection;
-	}
-
-	@Override
-	public PGraphics getLightsLayer() {
-		if (useProjectionForLights) {
-			return projection;
-		} else {
-			return lights;
-		}
-	}
-	*/
 
 }
