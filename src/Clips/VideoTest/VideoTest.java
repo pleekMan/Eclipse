@@ -50,7 +50,6 @@ public class VideoTest extends Clip {
 				video.read();
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -20,6 +20,7 @@ public class Main extends PApplet {
 		setPAppletSingleton();
 
 		textureMode(NORMAL);
+		imageMode(CENTER);
 
 		lights = new LightsManager();
 		lights.setup();

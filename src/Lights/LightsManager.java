@@ -14,10 +14,10 @@ public class LightsManager {
 	int ledsRayCount;
 	int ledsPerStrip;
 
-	PVector center;
 	PVector[] pickers;
 
-	float innerRadius, outerRadius, offset;
+	public static PVector center;
+	public static float innerRadius, outerRadius, offset;
 	float editDragDistance;
 
 	public boolean editMode;
@@ -82,7 +82,16 @@ public class LightsManager {
 
 	private void pick() {
 		for (int i = 0; i < pickers.length; i++) {
-			pickerColors[i] = lightLayer.get((int) pickers[i].x, (int) pickers[i].y);
+			
+			//int pickX = (int)((pickers[i].x / p5.width) * lightLayer.width);
+			
+			// IF THE CLIPS ARE GOING TO BE MOVING ALONG THE CALIBRATION, THE PICKERS NEED TO ADJUST THEIR (global X Y ) PICKING
+			// TO THE CLIPS SIZE/TRANSFORM PICK
+			int pickX = (int)(p5.map(pickers[i].x, center.x - outerRadius, center.x + outerRadius, 0, lightLayer.width));
+			int pickY = (int)(p5.map(pickers[i].y, center.y - outerRadius, center.y + outerRadius, 0, lightLayer.height));
+			
+			pickerColors[i] = lightLayer.get(pickX, pickY);
+			//pickerColors[i] = lightLayer.get((int) pickers[i].x, (int) pickers[i].y);
 		}
 		centralColor = lightLayer.get((int) center.x, (int) center.y);
 	}
@@ -286,7 +295,14 @@ public class LightsManager {
 		
 		setupPickers();
 	}
-
+	
+	public PVector getCenter(){
+		return center;
+	}
+	
+	public static float getBoundingBoxDimension(){
+		return outerRadius * 2;
+	}
 
 	protected Main getP5() {
 		return PAppletSingleton.getInstance().getP5Applet();

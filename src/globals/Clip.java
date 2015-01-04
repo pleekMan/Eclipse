@@ -1,15 +1,18 @@
 package globals;
 
+import Lights.LightsManager;
 import processing.core.PGraphics;
+import processing.core.PVector;
 
 public class Clip {
 
 	protected Main p5;
 	boolean isPlaying;
 	public boolean useProjectionForLights;
-	
+
 	String name;
-	
+	// public static PVector center;
+
 	protected PGraphics projection;
 	protected PGraphics lights;
 
@@ -20,13 +23,19 @@ public class Clip {
 	public void load() {
 		isPlaying = false;
 		useProjectionForLights = false;
-		
-		name = "??";
-		
-		projection = p5.createGraphics(p5.width, p5.height); // SI PONGO P2D, EL FRAMERATE DROPPEA MAAAAALL..!!
-		lights = p5.createGraphics(p5.width, p5.height);
-	}
 
+		name = "??";
+
+		int layerBoxSize = p5.height;
+		projection = p5.createGraphics(layerBoxSize, layerBoxSize); // SI PONGO
+																	// P2D, EL
+																	// FRAMERATE
+																	// DROPPEA
+																	// MAAAAALL..!!
+		lights = p5.createGraphics(layerBoxSize, layerBoxSize);
+
+		// center = LightsManager.center;
+	}
 
 	public void start() {
 		isPlaying = true;
@@ -39,38 +48,42 @@ public class Clip {
 	public boolean isPlaying() {
 		return isPlaying;
 	}
-	
-	public void setName(String _name){
+
+	public void setName(String _name) {
 		name = _name;
 	}
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
-	
-	public void useProjectionForLights(boolean state){
+
+	public void useProjectionForLights(boolean state) {
 		useProjectionForLights = state;
 	}
-	
+
 	public void updateProjection() {
 	}
-	
-	public void updateLights(){
+
+	public void updateLights() {
 	}
-	
+
 	public void renderProjection() {
 	}
-	public void renderLights(){
+
+	public void renderLights() {
 	}
-	
-	public PGraphics getProjectionLayer(){
+
+	public PGraphics getProjectionLayer() {
 		return projection;
 	}
-	public PGraphics getLightsLayer(){
+
+	public PGraphics getLightsLayer() {
 		if (useProjectionForLights) {
 			return projection;
 		} else {
 			return lights;
-		}	}
+		}
+	}
 
 	protected Main getP5() {
 		return PAppletSingleton.getInstance().getP5Applet();

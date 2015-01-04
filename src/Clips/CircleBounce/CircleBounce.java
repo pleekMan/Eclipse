@@ -1,5 +1,6 @@
 package Clips.CircleBounce;
 
+import Lights.LightsManager;
 import processing.core.PGraphics;
 import globals.Clip;
 
@@ -33,7 +34,7 @@ public class CircleBounce extends Clip {
 		projection.background(255);
 		projection.noFill();
 		projection.stroke(0);
-		projection.ellipse(p5.width * 0.5f, p5.height * 0.5f, diameter, diameter);
+		projection.ellipse(projection.width * 0.5f, projection.height * 0.5f, diameter, diameter);
 
 		// if (p5.frameCount % 100 == 0) {
 		projection.fill(p5.random(255), p5.random(255), p5.random(255));
@@ -54,7 +55,7 @@ public class CircleBounce extends Clip {
 		lights.stroke(255);
 		lights.strokeWeight(4);
 
-		lights.ellipse(p5.width * 0.5f, p5.height * 0.5f, p5.height - diameter, p5.height - diameter);
+		lights.ellipse(lights.width * 0.5f, lights.height * 0.5f, p5.height - diameter, p5.height - diameter);
 
 		lights.endDraw();
 
@@ -69,14 +70,21 @@ public class CircleBounce extends Clip {
 		 * projection.height, 1, 1); p5.vertex(0, projection.height, 0, 1);
 		 * p5.endShape(p5.CLOSE);
 		 */
-		p5.image(projection, 0, 0);
+		p5.pushMatrix();
+		p5.translate(LightsManager.center.x, LightsManager.center.y);
+		p5.image(projection, 0, 0, LightsManager.getBoundingBoxDimension(), LightsManager.getBoundingBoxDimension());
+		p5.popMatrix();
 
 	}
 
 	@Override
 	public void renderLights() {
 		if (!useProjectionForLights) {
-			p5.image(lights, 0, 0);
+			
+			p5.pushMatrix();
+			p5.translate(LightsManager.center.x, LightsManager.center.y);
+			p5.image(lights, 0, 0, LightsManager.getBoundingBoxDimension(), LightsManager.getBoundingBoxDimension());
+			p5.popMatrix();
 		}
 	}
 	
