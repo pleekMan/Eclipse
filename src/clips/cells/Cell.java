@@ -17,7 +17,7 @@ public class Cell {
 	float angleStep;
 	float size;
 	int color;
-	
+
 	float rotation;
 
 	AniSequence animation;
@@ -63,6 +63,8 @@ public class Cell {
 		projectionLayer.pushMatrix();
 		projectionLayer.translate(x, y);
 		projectionLayer.rotate(rotation);
+
+		// CELL BODY
 		projectionLayer.beginShape();
 
 		for (int i = 0; i < vertexCount; i++) {
@@ -72,7 +74,25 @@ public class Cell {
 		}
 
 		projectionLayer.endShape(p5.CLOSE);
-		
+
+		// SPARKS
+
+		if (p5.frameCount % 5 == 0) {
+			
+			for (int i = 0; i < 5; i++) {
+
+				projectionLayer.stroke(color);
+
+				float sparkX = p5.random(-size, size);
+				float sparkY = p5.random(-size, size);
+
+				float lineX = sparkX + p5.random(-5, 5);
+				float lineY = sparkY + p5.random(-5, 5);
+
+				projectionLayer.line(sparkX, sparkY, lineX, lineY);
+			}
+		}
+
 		projectionLayer.popMatrix();
 
 	}
@@ -94,9 +114,12 @@ public class Cell {
 		animation.endStep();
 
 		// step 1
+		// TODO ASSIGNING DIFFERENT EASINGS TO X,Y CREATES A MORE ORGANIC MOTION
 		String position = "x:" + p5.random(birthSize, projectionLayer.width - birthSize) + ",y:" + p5.random(birthSize, projectionLayer.height - birthSize);
 		animation.beginStep();
-		animation.add(p5.ani.to(this, p5.random(5, 20), position, Ani.CUBIC_IN_OUT));
+		animation.add(p5.ani.to(this, p5.random(5, 20), "x", p5.random(birthSize, projectionLayer.width - birthSize), Ani.ELASTIC_IN_OUT));
+		animation.add(p5.ani.to(this, p5.random(5, 20), "y", p5.random(birthSize, projectionLayer.height - birthSize), Ani.BACK_IN_OUT));
+		//animation.add(p5.ani.to(this, p5.random(5, 20), position, Ani.ELASTIC_IN_OUT));
 		animation.add(p5.ani.to(this, p5.random(5, 20), "rotation", p5.random(p5.TWO_PI), Ani.CUBIC_IN_OUT));
 		animation.endStep();
 
@@ -118,11 +141,10 @@ public class Cell {
 		animation.endStep();
 
 		animation.beginStep();
-		//animation.add(p5.ani.to(this, 2, "x:400,y:400", Ani.CUBIC_IN_OUT));
+		// animation.add(p5.ani.to(this, 2, "x:400,y:400", Ani.CUBIC_IN_OUT));
 		animation.add(p5.ani.to(this, 2, "size", 0, Ani.CUBIC_IN_OUT, "onEnd:animationEnd"));
 		animation.add(p5.ani.to(this, 2, "rotation", p5.random(p5.TWO_PI), Ani.CUBIC_IN_OUT));
 		animation.endStep();
-
 
 		animation.endSequence();
 
