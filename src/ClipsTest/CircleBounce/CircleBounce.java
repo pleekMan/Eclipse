@@ -1,4 +1,4 @@
-package Clips.CircleBounce;
+package ClipsTest.CircleBounce;
 
 import Lights.LightsManager;
 import processing.core.PGraphics;

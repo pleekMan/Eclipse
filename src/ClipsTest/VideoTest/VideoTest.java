@@ -1,4 +1,4 @@
-package Clips.VideoTest;
+package ClipsTest.VideoTest;
 
 import org.gstreamer.lowlevel.BaseSrcAPI.Create;
 

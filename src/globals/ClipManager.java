@@ -2,13 +2,15 @@ package globals;
 
 import java.util.ArrayList;
 
+import clips.cells.Cells;
 import controlP5.Toggle;
 import processing.core.PGraphics;
-import Clips.CircleBounce.CircleBounce;
-import Clips.RectBounce.RectBounce;
-import Clips.VideoTest.VideoTest;
-import Clips.Hedera.Hedera;
-import Clips.LineColor.LineColor;
+import processing.core.PImage;
+import ClipsTest.CircleBounce.CircleBounce;
+import ClipsTest.Hedera.Hedera;
+import ClipsTest.LineColor.LineColor;
+import ClipsTest.RectBounce.RectBounce;
+import ClipsTest.VideoTest.VideoTest;
 import Lights.LightsManager;
 
 public class ClipManager {
@@ -22,6 +24,8 @@ public class ClipManager {
 
 	boolean editMode;
 	boolean showLightLayer;
+	
+	PImage mask;
 
 	public ClipManager(LightsManager _lightManager) {
 		p5 = getP5();
@@ -34,6 +38,8 @@ public class ClipManager {
 
 		editMode = false;
 		showLightLayer = false;
+		
+		mask = p5.loadImage("OctagonaMask.png");
 	}
 
 	public void setup() {
@@ -62,6 +68,9 @@ public class ClipManager {
 				}
 			}
 		}
+		
+		// RENDER MASK
+		p5.image(mask, LightsManager.center.x, LightsManager.center.y, LightsManager.getBoundingBoxDimension(), LightsManager.getBoundingBoxDimension());
 
 		// EDIT MODE DISPLAY -------------------------------
 
@@ -145,11 +154,20 @@ public class ClipManager {
 		// SELECT AND LOAD CLIPS
 		switch (key) {
 		case '1':
+			
+			Cells cellIntro = new Cells();
+			cellIntro.load();
+			cellIntro.setName("Cell Intro");
+			clips.add(cellIntro);
+			System.out.println("Loaded :: " + Cells.class.getName());
+
+			/*
 			CircleBounce circleBounce = new CircleBounce();
 			circleBounce.load();
 			circleBounce.setName("CIRCLE");
 			clips.add(circleBounce);
 			System.out.println("Loaded :: " + CircleBounce.class.getName());
+			*/
 			break;
 		case '2':
 			VideoTest video = new VideoTest();

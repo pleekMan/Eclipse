@@ -1,4 +1,4 @@
-package Clips.Hedera;
+package ClipsTest.Hedera;
 import globals.Main;
 import globals.PAppletSingleton;
 

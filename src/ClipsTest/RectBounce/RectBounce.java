@@ -1,4 +1,4 @@
-package Clips.RectBounce;
+package ClipsTest.RectBounce;
 
 import globals.Clip;
 import globals.Main;

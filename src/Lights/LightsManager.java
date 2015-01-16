@@ -31,8 +31,17 @@ public class LightsManager {
 		p5 = getP5();
 
 		p5.println(Serial.list());
-		String portName = Serial.list()[5]; // ARDUINO IS USUALLY PORT 5 (tty.usbmodemXXXX)
-		serialPort = new Serial(p5, portName, 115200);
+		try {
+			String portName = Serial.list()[5]; // ARDUINO IS USUALLY PORT 5
+												// (tty.usbmodemXXXX)
+			serialPort = new Serial(p5, portName, 115200);
+		} catch (Exception e) {
+			p5.println("*********************");
+			p5.println("NO ENCHUFASTE EL ARDUINO, GILUN");
+			p5.println("*********************");
+
+			//e.printStackTrace();
+		}
 	}
 
 	public void setup() {
@@ -83,6 +92,12 @@ public class LightsManager {
 	}
 
 	private void pick() {
+		
+		float negativeOuterRadiusX = center.x - outerRadius - offset;
+		float positiveOuterRadiusX = center.x + outerRadius + offset;
+		float negativeOuterRadiusY = center.y - outerRadius - offset;
+		float positiveOuterRadiusY = center.y + outerRadius + offset;
+		
 		for (int i = 0; i < pickers.length; i++) {
 
 			// int pickX = (int)((pickers[i].x / p5.width) * lightLayer.width);
@@ -90,23 +105,28 @@ public class LightsManager {
 			// IF THE CLIPS ARE GOING TO BE MOVING ALONG THE CALIBRATION, THE
 			// PICKERS NEED TO ADJUST THEIR (global X Y ) PICKING
 			// TO THE CLIPS SIZE/TRANSFORM PICK
-			int pickX = (int) (p5.map(pickers[i].x, center.x - outerRadius - offset, center.x + outerRadius + offset, 0, lightLayer.width));
-			int pickY = (int) (p5.map(pickers[i].y, center.y - outerRadius - offset, center.y + outerRadius + offset, 0, lightLayer.height));
+			int pickX = (int) (p5.map(pickers[i].x, negativeOuterRadiusX, positiveOuterRadiusX, 0, lightLayer.width));
+			int pickY = (int) (p5.map(pickers[i].y, negativeOuterRadiusY, positiveOuterRadiusY, 0, lightLayer.height));
 
 			pickerColors[i] = lightLayer.get(pickX, pickY);
 			// pickerColors[i] = lightLayer.get((int) pickers[i].x, (int)
 			// pickers[i].y);
 		}
 		centralColor = lightLayer.get((int) (lightLayer.width * 0.5f), (int) (lightLayer.height * 0.5f));
-		
+
+		// SEND COLORS
 		sendColors();
 	}
-	
-	private void sendColors(){
-		int realLEDCount = 30;
-		for (int i=0; i < realLEDCount; i++) {
-		      byte[] toSend = {(byte)(p5.red(pickerColors[i])),(byte)(p5.green(pickerColors[i])), (byte)(p5.blue(pickerColors[i])) };
-		      serialPort.write(toSend);
+
+	private void sendColors() {
+
+		if (serialPort != null) {
+
+			int realLEDCount = 30;
+			for (int i = 0; i < realLEDCount; i++) {
+				byte[] toSend = { (byte) (p5.red(pickerColors[i])), (byte) (p5.green(pickerColors[i])), (byte) (p5.blue(pickerColors[i])) };
+				serialPort.write(toSend);
+			}
 		}
 	}
 

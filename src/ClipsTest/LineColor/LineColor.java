@@ -1,4 +1,4 @@
-package Clips.LineColor;
+package ClipsTest.LineColor;
 
 import processing.core.PGraphics;
 import globals.Clip;

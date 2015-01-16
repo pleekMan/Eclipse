@@ -3,6 +3,8 @@ package globals;
 import controlP5.*;
 import Lights.LightsManager;
 import processing.core.PApplet;
+import de.looksgood.ani.*;
+
 
 public class Main extends PApplet {
 
@@ -14,6 +16,8 @@ public class Main extends PApplet {
 	ControlP5 cp5;
 
 	// GUI - END -------------------
+	
+	public Ani ani;
 
 	public void setup() {
 		size(1024, 768, P2D);
@@ -21,6 +25,8 @@ public class Main extends PApplet {
 
 		textureMode(NORMAL);
 		imageMode(CENTER);
+		
+		ani.init(this);
 
 		lights = new LightsManager();
 		lights.setup();
