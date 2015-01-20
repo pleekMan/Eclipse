@@ -12,11 +12,13 @@ public class Cells extends Clip {
 	// 1 : CELLS START FREAKING OUT / LIGHTS FLASH
 	// 2 : PRODUCTION LINE
 
-	float diameter;
-	float velocity;
+	//float diameter;
+	//float velocity;
 
 	ArrayList<Cell> cells;
-
+	
+	float[] lightCirclesSize;
+	
 	public Cells() {
 		super();
 	}
@@ -28,14 +30,19 @@ public class Cells extends Clip {
 
 		cells = new ArrayList<Cell>();
 
-		/*
-		 * for (int i = 0; i < 10; i++) { Cell newCell = new Cell(projection);
-		 * cells.add(newCell); }
-		 */
-
+		lightCirclesSize = new float[10];
+		float separation = lights.height / lightCirclesSize.length;
+		for (int i = 0; i < lightCirclesSize.length; i++) {
+			lightCirclesSize[i] = separation * i;;
+		}
+		
 		projection.beginDraw();
 		projection.background(0);
 		projection.endDraw();
+		
+		lights.beginDraw();
+		lights.background(0);
+		lights.endDraw();
 
 	}
 
@@ -103,7 +110,7 @@ public class Cells extends Clip {
 		lights.rect(0, 0, lights.width, lights.height);
 
 		if (triggers[1]) {
-
+			//  DRAW DIAGONAL CROSS
 			lights.fill(255);
 			lights.rect(0, 0, lights.width, lights.height);
 			lights.fill(0);
@@ -112,12 +119,51 @@ public class Cells extends Clip {
 			
 		} else if (cells.size() != 0 && cells.get(0).isInLine) {
 			
+			/*
 			lights.stroke(255);
-			int circleCount = (int)(lights.height * 0.3);
-			float offset = p5.frameCount % circleCount;
+			//lights.strokeWeight(20);
+			int circleCount = (int)(lights.height * 0.8);
+			float offset = (p5.frameCount % circleCount) * 5;
 			for (int i = 0; i < lights.height; i += circleCount) {
 				lights.ellipse(lights.width * 0.5f, lights.height * 0.5f, i - offset, i - offset);
+			}*/
+			
+			lights.background(0);
+			lights.strokeWeight(40);
+			
+			for (int i = 0; i < lightCirclesSize.length; i++) {
+				
+				if (i % 2 == 0) {
+					lights.stroke(0,255,255);
+				} else {
+					lights.stroke(255);
+				}
+				
+				lights.ellipse(lights.width * 0.5f, lights.height * 0.5f, lightCirclesSize[i],lightCirclesSize[i]);
+				
+				lightCirclesSize[i] -= 10;
+				
+				if (lightCirclesSize[i] < 0) {
+					lightCirclesSize[i] = lights.height;
+				}
+				
+				
 			}
+			
+			lights.noStroke();
+			lights.fill(0);
+			lights.rect(lights.width * 0.5f - 20, 0, 40, lights.height - 20);
+			lights.rect(0, lights.height * 0.5f - 20, lights.width, 40);
+			
+			for (Cell actualCell : cells) {
+				if (actualCell.x < (lights.width * 0.5f) + 10 && actualCell.x > (lights.width * 0.5f) - 10) {
+					lights.fill(actualCell.color);
+					lights.ellipse(lights.width * 0.5f, lights.height * 0.5f, 30, 30);
+					break;
+				}
+			}
+			
+			//lights.strokeWeight(20);
 			
 		}
 

@@ -101,13 +101,15 @@ public class Cell {
 		}
 
 		if (isFreakingOut) {
-			if (p5.frameCount % (int) p5.random(10, 15) == 0) {
+			if (p5.frameCount % (int) p5.random(30, 45) == 0) {
 				// for (int i = 0; i < 2; i++) {
 				projectionLayer.strokeWeight(p5.random(2, 6));
 
 				projectionLayer.translate(p5.random(-20, 20), p5.random(-20, 20));
-				projectionLayer.stroke(0, 255 * (1 - animation[1].getSeek()), 255 * (1 - animation[1].getSeek()));
+				//projectionLayer.stroke(0, 255 * (1 - animation[1].getSeek()), 255 * (1 - animation[1].getSeek()));
+				projectionLayer.stroke(0, 255, 255);
 
+				
 				projectionLayer.triangle(0, -(size * 0.5f), size * 0.5f, size * 0.5f, -(size * 0.5f), size * 0.5f);
 				// }
 
@@ -117,9 +119,10 @@ public class Cell {
 
 			if (p5.frameCount % 5 == 0) {
 
+				projectionLayer.stroke(0,255,255);
+
 				for (int i = 0; i < 5; i++) {
 
-					projectionLayer.stroke(color);
 
 					float sparkX = p5.random(-size, size);
 					float sparkY = p5.random(-size, size);
@@ -136,12 +139,14 @@ public class Cell {
 			if (x > projectionLayer.width * 0.5f) {
 				isInLineTriangle = true;
 				size = 100;
+				rotation = 0;
+				y = projectionLayer.height * 0.5f;
 			} else {
 				isInLineTriangle = false;
 			}
 			
 			if (x > projectionLayer.width + size) {
-				size = p5.random(20, 200);
+				size = p5.random(20, 400);
 				x = - size;
 			}
 		}
@@ -233,16 +238,26 @@ public class Cell {
 		// INTRO - END
 
 		// FREAK OUT - BEGIN
+		
 		float inLineX = p5.random(10, projectionLayer.width * 0.4f);
 		float inLineY = projectionLayer.height * 0.5f;
 		int time = 25;
+
 		freakOut.beginSequence();
 		freakOut.beginStep();
 		freakOut.add(p5.ani.to(this, time, "x", inLineX, Ani.EXPO_IN_OUT));
 		freakOut.add(p5.ani.to(this, time, "y", inLineY, Ani.QUINT_IN));
 		freakOut.add(p5.ani.to(this, time, "rotation", 0, Ani.BACK_IN_OUT));
 		freakOut.endStep();
+		
+		/*
+		freakOut.beginStep();
+		freakOut.add(p5.ani.to(this, 2, "size", 0, Ani.EXPO_IN));
+		freakOut.endStep();
+		*/
+		
 		freakOut.endSequence();
+		
 		// FREAK OUT - END
 	}
 
