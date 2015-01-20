@@ -51,6 +51,7 @@ public class ClipManager {
 			if (clip.isPlaying()) {
 				clip.updateProjection();
 				clip.updateLights();
+				clip.resetTriggers();
 
 				// PGraphics layer1 = clip.getProjectionLayer();
 				// p5.image(layer1,0,0);
@@ -217,6 +218,23 @@ public class ClipManager {
 
 		if (key == 'l') {
 			toggleLightLayer();
+		}
+		
+		// TRIGGERS
+		if (key == 'z') {
+			clips.get(playingClip).trigger(0);
+		}
+		if (key == 'x') {
+			clips.get(playingClip).trigger(1);
+		}
+		if (key == 'c') {
+			clips.get(playingClip).trigger(2);
+		}
+		if (key == 'v') {
+			clips.get(playingClip).trigger(3);
+		}
+		if (key == 'b') {
+			clips.get(playingClip).trigger(4);
 		}
 	}
 

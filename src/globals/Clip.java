@@ -16,6 +16,8 @@ public class Clip {
 	protected PGraphics projection;
 	protected PGraphics lights;
 
+	protected boolean[] triggers;
+
 	public Clip() {
 		p5 = getP5();
 	}
@@ -34,6 +36,11 @@ public class Clip {
 																	// MAAAAALL..!!
 		lights = p5.createGraphics(layerBoxSize, layerBoxSize);
 
+		triggers = new boolean[5];
+		for (int i = 0; i < triggers.length; i++) {
+			triggers[i] = false;
+		}
+
 		// center = LightsManager.center;
 	}
 
@@ -51,6 +58,16 @@ public class Clip {
 
 	public void setName(String _name) {
 		name = _name;
+	}
+
+	public void trigger(int triggerId) {
+		triggers[triggerId] = true;
+	}
+
+	public void resetTriggers() {
+		for (int i=0; i < triggers.length; i++) {
+			triggers[i] = false;
+		}
 	}
 
 	public String getName() {
