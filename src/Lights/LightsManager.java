@@ -1,7 +1,9 @@
 package Lights;
 
+import controlP5.Println;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import processing.data.XML;
 import processing.serial.*;
 import globals.Main;
 import globals.PAppletSingleton;
@@ -325,7 +327,14 @@ public class LightsManager {
 
 		ledsRayCount = 8;
 		ledsPerStrip = 15;
+		
+		center = new PVector(p5.width * 0.5f, p5.height * 0.5f);
+		innerRadius = 100;
+		outerRadius = 350;
+		offset = 0;
 
+		///////////////
+		
 		pickers = new PVector[ledsRayCount * ledsPerStrip];
 		pickerColors = new int[pickers.length];
 
@@ -334,13 +343,54 @@ public class LightsManager {
 			pickerColors[i] = p5.color((i / (float) pickers.length) * 255f, 0, 0);
 		}
 
-		center = new PVector(p5.width * 0.5f, p5.height * 0.5f);
-		innerRadius = 100;
-		outerRadius = 350;
-		offset = 0;
+		
 
 		setupPickers();
 	}
+	
+	public void loadLightSettings(){
+		
+		XML settingsFile = p5.loadXML("settings.xml"); // reads and stand at the Master Node
+		XML lightSettings = settingsFile.getChild("lights");
+		
+		center = new PVector(lightSettings.getFloat("centerX"), lightSettings.getFloat("centerY"));
+		innerRadius = lightSettings.getFloat("innerRadius");
+		outerRadius = lightSettings.getFloat("outerRadius");
+		offset = lightSettings.getFloat("offset");
+		
+		ledsRayCount = lightSettings.getInt("rays");
+		ledsPerStrip = lightSettings.getInt("rings");
+		
+		///////////////
+		
+		pickers = new PVector[ledsRayCount * ledsPerStrip];
+		pickerColors = new int[pickers.length];
+
+		for (int i = 0; i < pickers.length; i++) {
+			pickers[i] = new PVector();
+			pickerColors[i] = p5.color((i / (float) pickers.length) * 255f, 0, 0);
+		}
+
+		setupPickers();
+		
+	}
+	
+	public void saveLightSettings(){
+		
+		XML settingsFile = new XML("settings");
+		XML lightSettings = settingsFile.addChild("lights");
+		
+		lightSettings.setFloat("centerX", center.x);
+		lightSettings.setFloat("centerY", center.y);
+		lightSettings.setFloat("innerRadius", innerRadius);
+		lightSettings.setFloat("outerRadius", outerRadius);
+		lightSettings.setFloat("offset", offset);
+
+		lightSettings.setInt("rays", ledsRayCount);
+		lightSettings.setInt("rings", ledsPerStrip);
+		
+		p5.saveXML(settingsFile, "bin/data/settings.xml");
+}
 
 	public PVector getCenter() {
 		return center;

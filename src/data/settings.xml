@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+	<lights centerX="400" centerY="400" innerRadius="50" outerRadius="400" offset="20" rays="4" rings="10"></lights>
+</settings>
