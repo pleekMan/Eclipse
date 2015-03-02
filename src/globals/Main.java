@@ -41,9 +41,9 @@ public class Main extends PApplet {
 
 	public void draw() {
 		frame.setTitle(Integer.toString(((int) frameRate)) + " fps");
-		// background(0);
-		background(25, 25, 50);
-		drawBackLines();
+		background(50);
+		//background(25, 25, 50);
+		//drawBackLines();
 
 		clipManager.update();
 		clipManager.render();

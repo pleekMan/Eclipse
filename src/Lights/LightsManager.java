@@ -42,7 +42,7 @@ public class LightsManager {
 			p5.println("NO ENCHUFASTE EL ARDUINO, GILUN");
 			p5.println("*********************");
 
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -94,12 +94,12 @@ public class LightsManager {
 	}
 
 	private void pick() {
-		
+
 		float negativeOuterRadiusX = center.x - outerRadius - offset;
 		float positiveOuterRadiusX = center.x + outerRadius + offset;
 		float negativeOuterRadiusY = center.y - outerRadius - offset;
 		float positiveOuterRadiusY = center.y + outerRadius + offset;
-		
+
 		for (int i = 0; i < pickers.length; i++) {
 
 			// int pickX = (int)((pickers[i].x / p5.width) * lightLayer.width);
@@ -122,14 +122,47 @@ public class LightsManager {
 
 	private void sendColors() {
 
-		if (serialPort != null) {
+		//if (p5.frameCount % 4 == 0) { // SENDING AT EVERY FRAME DROPS FRAMERATE TO 18
+			
+			if (serialPort != null) {
 
-			int realLEDCount = 30;
-			for (int i = 0; i < realLEDCount; i++) {
-				byte[] toSend = { (byte) (p5.red(pickerColors[i])), (byte) (p5.green(pickerColors[i])), (byte) (p5.blue(pickerColors[i])) };
-				serialPort.write(toSend);
+				//int realLEDCount = 120;
+				//for (int i = 0; i < realLEDCount; i++) {
+				
+				for (int i = 0; i < pickers.length; i++) {
+					byte[] toSend = { (byte) (p5.red(pickerColors[i])), (byte) (p5.green(pickerColors[i])), (byte) (p5.blue(pickerColors[i])) };
+					serialPort.write(toSend);
+				}
 			}
-		}
+		//}
+	}
+	
+	@Deprecated
+	private void sendColorsArray() {
+		
+		// TRYING TO SEND THE COLORS ONLY ONCE.... IT'S THE SAME..
+		
+		//if (p5.frameCount % 4 == 0) { // SENDING AT EVERY FRAME DROPS FRAMERATE TO 18
+			
+		byte[] colorArray = new byte[pickers.length * 3];
+		
+			if (serialPort != null) {
+
+				//int realLEDCount = 120;
+				//for (int i = 0; i < realLEDCount; i++) {
+				
+				for (int i = 0; i < pickers.length; i++) {
+					byte[] toSend = { (byte) (p5.red(pickerColors[i])), (byte) (p5.green(pickerColors[i])), (byte) (p5.blue(pickerColors[i])) };
+					
+					for (int j = 0; j < toSend.length; j++) {
+						colorArray[i+j] = toSend[j];
+					}
+					//serialPort.write(toSend);
+				}
+			}
+			
+			serialPort.write(colorArray);
+		//}
 	}
 
 	public void drawCalibration() {
@@ -327,14 +360,14 @@ public class LightsManager {
 
 		ledsRayCount = 8;
 		ledsPerStrip = 15;
-		
+
 		center = new PVector(p5.width * 0.5f, p5.height * 0.5f);
 		innerRadius = 100;
 		outerRadius = 350;
 		offset = 0;
 
-		///////////////
-		
+		// /////////////
+
 		pickers = new PVector[ledsRayCount * ledsPerStrip];
 		pickerColors = new int[pickers.length];
 
@@ -343,26 +376,25 @@ public class LightsManager {
 			pickerColors[i] = p5.color((i / (float) pickers.length) * 255f, 0, 0);
 		}
 
-		
-
 		setupPickers();
 	}
-	
-	public void loadLightSettings(){
-		
-		XML settingsFile = p5.loadXML("settings.xml"); // reads and stand at the Master Node
+
+	public void loadLightSettings() {
+
+		XML settingsFile = p5.loadXML("settings.xml"); // reads and stand at the
+														// Master Node
 		XML lightSettings = settingsFile.getChild("lights");
-		
+
 		center = new PVector(lightSettings.getFloat("centerX"), lightSettings.getFloat("centerY"));
 		innerRadius = lightSettings.getFloat("innerRadius");
 		outerRadius = lightSettings.getFloat("outerRadius");
 		offset = lightSettings.getFloat("offset");
-		
+
 		ledsRayCount = lightSettings.getInt("rays");
 		ledsPerStrip = lightSettings.getInt("rings");
-		
-		///////////////
-		
+
+		// /////////////
+
 		pickers = new PVector[ledsRayCount * ledsPerStrip];
 		pickerColors = new int[pickers.length];
 
@@ -372,14 +404,14 @@ public class LightsManager {
 		}
 
 		setupPickers();
-		
+
 	}
-	
-	public void saveLightSettings(){
-		
+
+	public void saveLightSettings() {
+
 		XML settingsFile = new XML("settings");
 		XML lightSettings = settingsFile.addChild("lights");
-		
+
 		lightSettings.setFloat("centerX", center.x);
 		lightSettings.setFloat("centerY", center.y);
 		lightSettings.setFloat("innerRadius", innerRadius);
@@ -388,9 +420,9 @@ public class LightsManager {
 
 		lightSettings.setInt("rays", ledsRayCount);
 		lightSettings.setInt("rings", ledsPerStrip);
-		
+
 		p5.saveXML(settingsFile, "bin/data/settings.xml");
-}
+	}
 
 	public PVector getCenter() {
 		return center;

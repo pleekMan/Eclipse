@@ -24,6 +24,7 @@ public class VideoTest extends Clip {
 
 		// TODO PARAMETERIZE VIDEO PATH
 		video = new Movie(p5, p5.sketchPath + "/bin/Clips/VideoTest/Test01.mov");
+		//video = new Movie(p5, p5.sketchPath + "/bin/Clips/VideoTest/Test01.mov");
 		video.pause();
 		
 		videoTransfer = p5.createImage(video.width, video.height, p5.ARGB);

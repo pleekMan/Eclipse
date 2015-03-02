@@ -136,7 +136,7 @@ public class Cells extends Clip {
 				if (i % 2 == 0) {
 					lights.stroke(0,255,255);
 				} else {
-					lights.stroke(255);
+					lights.stroke(0);
 				}
 				
 				lights.ellipse(lights.width * 0.5f, lights.height * 0.5f, lightCirclesSize[i],lightCirclesSize[i]);
