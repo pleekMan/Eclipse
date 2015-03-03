@@ -177,7 +177,6 @@ public class Cell {
 		intro.endStep();
 
 		// step 1
-		// TODO ASSIGNING DIFFERENT EASINGS TO X,Y CREATES A MORE ORGANIC MOTION
 		// String position = "x:" + p5.random(birthSize, projectionLayer.width -
 		// birthSize) + ",y:" + p5.random(birthSize, projectionLayer.height -
 		// birthSize);

@@ -43,7 +43,7 @@ public class Main extends PApplet {
 		frame.setTitle(Integer.toString(((int) frameRate)) + " fps");
 		background(50);
 		//background(25, 25, 50);
-		//drawBackLines();
+		drawBackLines();
 
 		clipManager.update();
 		clipManager.render();

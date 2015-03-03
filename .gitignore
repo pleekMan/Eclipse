@@ -1,3 +1,5 @@
 /bin
 /src/Clips/VideoTest/Test01.mov
 /bin
+
+*.mov

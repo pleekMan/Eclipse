@@ -28,8 +28,11 @@ public class Clip {
 
 		name = "??";
 
-		int layerBoxSize = p5.height;
+		//int layerBoxSize = p5.height;
+		int layerBoxSize = 600; // RESOLUCION Q SE LA BANCA
+		
 		projection = p5.createGraphics(layerBoxSize, layerBoxSize); // SI PONGO
+		
 																	// P2D, EL
 																	// FRAMERATE
 																	// DROPPEA

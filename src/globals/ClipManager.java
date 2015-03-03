@@ -10,7 +10,7 @@ import ClipsTest.CircleBounce.CircleBounce;
 import ClipsTest.Hedera.Hedera;
 import ClipsTest.LineColor.LineColor;
 import ClipsTest.RectBounce.RectBounce;
-import ClipsTest.VideoTest.VideoTest;
+import ClipsTest.VideoTest.VideoClip;
 import Lights.LightsManager;
 
 public class ClipManager {
@@ -101,7 +101,14 @@ public class ClipManager {
 					p5.text("Light Layer: - LIGHTS", 20, 80);
 
 				}
+				
+				//p5.imageMode(p5.CORNER);
+				//p5.image(getPlayingClip().getProjectionLayer(), p5.width - 400, 0, 200, 200);
+				//p5.image(getPlayingClip().getLightsLayer(), p5.width - 200, 0, 200, 200);
 			}
+			
+			
+
 
 		}
 
@@ -171,11 +178,12 @@ public class ClipManager {
 			*/
 			break;
 		case '2':
-			VideoTest video = new VideoTest();
-			video.load();
-			video.setName("VIDEO");
+			VideoClip video = new VideoClip();
+			video.load("ManMarching/manMarching_video.mov", "ManMarching/manMarching_lights_half.mov");
+			video.setName("MAN MARCHING");
+			video.useProjectionForLights(false);
 			clips.add(video);
-			System.out.println("Loaded :: " + VideoTest.class.getName());
+			System.out.println("Loaded :: " + VideoClip.class.getName());
 			break;
 		case '3':
 			Hedera hiedra = new Hedera();
