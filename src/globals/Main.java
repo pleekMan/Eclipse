@@ -41,9 +41,9 @@ public class Main extends PApplet {
 
 	public void draw() {
 		frame.setTitle(Integer.toString(((int) frameRate)) + " fps");
-		background(50);
+		background(0);
 		//background(25, 25, 50);
-		drawBackLines();
+		//drawBackLines();
 
 		clipManager.update();
 		clipManager.render();
@@ -203,8 +203,7 @@ public class Main extends PApplet {
 		 */
 
 		PApplet.main(new String[] { Main.class.getName() });
-		// PApplet.main(new String[] { "--present","--hide-stop",
-		// Main.class.getName() }); //
+		//PApplet.main(new String[] { "--present","--hide-stop",Main.class.getName() }); //
 		// PRESENT MODE
 	}
 

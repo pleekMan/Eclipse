@@ -3,6 +3,7 @@ package globals;
 import java.util.ArrayList;
 
 import clips.cells.Cells;
+import clips.test.Test;
 import controlP5.Toggle;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -161,6 +162,17 @@ public class ClipManager {
 
 		// SELECT AND LOAD CLIPS
 		switch (key) {
+		
+		case '0':
+			
+			Test testLights = new Test();
+			testLights.load();
+			testLights.setName("TEST LIGHTS");
+			testLights.useProjectionForLights(true);
+			clips.add(testLights);
+			System.out.println("Loaded :: " + testLights.getName());
+			break;
+			
 		case '1':
 			
 			Cells cellIntro = new Cells();
@@ -191,6 +203,7 @@ public class ClipManager {
 			hiedra.setName("HEDERA");
 			clips.add(hiedra);
 			System.out.println("Loaded :: " + Hedera.class.getName());
+			
 			break;
 		case '4':
 			LineColor linea = new LineColor();
